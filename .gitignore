@@ -1,0 +1,9 @@
+# Dependencies
+node_modules/
+
+# Environment variables (they hold secrets)
+.env
+!.env.example
+
+# Build output
+dist/
