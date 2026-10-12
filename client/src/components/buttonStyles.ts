@@ -1,4 +1,5 @@
 export type ButtonVariant = 'primary' | 'secondary' | 'danger'
+export type ButtonSize = 'md' | 'sm'
 
 const variantClasses: Record<ButtonVariant, string> = {
   primary: 'bg-primary text-white hover:bg-primary/90',
@@ -6,7 +7,13 @@ const variantClasses: Record<ButtonVariant, string> = {
   danger: 'bg-overdue text-white hover:bg-overdue/90',
 }
 
+// `sm` is for actions inside table rows and cards
+const sizeClasses: Record<ButtonSize, string> = {
+  md: 'px-4 py-2 text-sm',
+  sm: 'px-3 py-1.5 text-xs',
+}
+
 // Shared by <Button> and <ButtonLink>, so a link that looks like a button matches exactly
-export function buttonClasses(variant: ButtonVariant): string {
-  return `inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-60 ${variantClasses[variant]}`
+export function buttonClasses(variant: ButtonVariant, size: ButtonSize = 'md'): string {
+  return `inline-flex items-center justify-center gap-2 rounded-lg font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-60 ${sizeClasses[size]} ${variantClasses[variant]}`
 }
