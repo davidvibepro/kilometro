@@ -14,7 +14,12 @@ if (!MONGO_URI) {
 
 try {
   await connectDB(MONGO_URI);
-  app.listen(PORT, () => {
+  // Express 5 passes a startup error (e.g. the port is already in use) to this callback
+  app.listen(PORT, (error) => {
+    if (error) {
+      console.error(`Could not start the server on port ${PORT}: ${error.message}`);
+      process.exit(1);
+    }
     console.log(`Server listening on http://localhost:${PORT}`);
   });
 } catch (error) {
