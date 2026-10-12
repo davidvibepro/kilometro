@@ -56,3 +56,32 @@ export interface CostReport extends CostTotals {
   distance: number
   costPerKm: number | null
 }
+
+// GET /reminders (D7), already sorted from most to least urgent (D20)
+interface ReminderVehicle {
+  _id: string
+  plateNumber: string
+  make: string
+  model: string
+}
+
+export interface ServiceReminder {
+  kind: 'service'
+  status: 'overdue' | 'due_soon'
+  vehicle: ReminderVehicle
+  serviceType: { _id: string; name: string; intervalKm?: number; intervalMonths?: number }
+  nextDueKm: number | null
+  nextDueDate: string | null
+  kmRemaining: number | null
+  daysRemaining: number | null
+  shareLeft: number
+}
+
+export interface RegistrationReminder {
+  kind: 'registration'
+  status: 'due_this_month' | 'due_next_month'
+  vehicle: ReminderVehicle
+  registrationMonth: string
+}
+
+export type Reminder = ServiceReminder | RegistrationReminder
