@@ -119,7 +119,8 @@ function FuelLogsPage() {
 
     // Derived during render: totals of the list, and each fill-up's km per liter by id
     const totalLiters = data.fuelLogs.reduce((sum, log) => sum + log.liters, 0)
-    const totalCost = data.fuelLogs.reduce((sum, log) => sum + log.liters * log.pricePerLiter, 0)
+    // D21: each fill-up's cost is rounded to the centavo before adding, like the server's reports
+    const totalCost = data.fuelLogs.reduce((sum, log) => sum + Math.round(log.liters * log.pricePerLiter * 100) / 100, 0)
     const entryById = new Map(data.entries.map((entry) => [entry.fuelLogId, entry]))
 
     const actions = (log: FuelLog) => (

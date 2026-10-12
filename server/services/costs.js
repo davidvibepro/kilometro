@@ -39,11 +39,13 @@ export function isInRange(date, from, to) {
   return true;
 }
 
-// Fuel = liters x price per liter, service = cost, other = expense amount (D9)
+// Fuel = liters x price per liter, service = cost, other = expense amount (D9).
+// D21: each record is rounded to the centavo before adding (that is what was paid),
+// so totals by month, by vehicle and for the fleet always add up exactly.
 export function sumCosts(fuelLogs, serviceLogs, expenses) {
-  const fuel = roundTo2(fuelLogs.reduce((sum, log) => sum + log.liters * log.pricePerLiter, 0));
-  const service = roundTo2(serviceLogs.reduce((sum, log) => sum + (log.cost ?? 0), 0));
-  const other = roundTo2(expenses.reduce((sum, expense) => sum + expense.amount, 0));
+  const fuel = roundTo2(fuelLogs.reduce((sum, log) => sum + roundTo2(log.liters * log.pricePerLiter), 0));
+  const service = roundTo2(serviceLogs.reduce((sum, log) => sum + roundTo2(log.cost ?? 0), 0));
+  const other = roundTo2(expenses.reduce((sum, expense) => sum + roundTo2(expense.amount), 0));
   return { fuel, service, other, total: roundTo2(fuel + service + other) };
 }
 
