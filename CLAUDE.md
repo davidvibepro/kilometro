@@ -393,6 +393,19 @@ An invalid ObjectId in a filter returns 400.
 
 **D18. Vehicle detail payload.** GET /api/vehicles/:id populates `owner` and includes `currentOdometer` and `registrationMonth` (the month name).
 
+**D19. Extra required fields.** These fields are required even though §3 does not mark them, because the §4 processing rules need them:
+- `vehicles.type` and `vehicles.startingOdometer` (service schedule D6, odometer rule D5)
+- `fuelLogs.liters` and `fuelLogs.pricePerLiter` (fuel efficiency D8, cost report D9)
+- `expenses.category` and `expenses.amount` (cost report D9)
+
+All other §3 fields without "required" stay optional.
+
+**D20. Reminder urgency.** Inside the overdue group and the due-soon group of D7, reminders are sorted by the share of the interval left:
+- shareLeft = the smaller of `kmRemaining ÷ intervalKm` and `daysRemaining ÷ (intervalMonths × 30.44)`; a limit that does not exist is ignored.
+- Lower comes first. Example: 500 km past a 5,000 km interval is −10%; 41 days past a 12-month interval is −11%, so it ranks first.
+
+**D21. Money is added in centavos.** Each record is rounded to the centavo before it is added up: a fill-up costs `liters × pricePerLiter` rounded to 2 decimals, and service costs and expense amounts are rounded the same way. Totals by month, by vehicle and for the whole fleet then always match.
+
 ---
 
 ## 10. Seed data (`npm run seed` in server/)
