@@ -28,3 +28,15 @@ export function getRegistrationMonthName(plateNumber) {
   const month = getRegistrationMonth(plateNumber);
   return month ? MONTH_NAMES[month - 1] : null;
 }
+
+// D7: 'due_this_month', 'due_next_month', or null when the renewal is further away.
+// After December comes January.
+export function getRegistrationStatus(plateNumber, today = new Date()) {
+  const month = getRegistrationMonth(plateNumber);
+  const thisMonth = today.getMonth() + 1; // getMonth() counts from 0
+  const nextMonth = thisMonth === 12 ? 1 : thisMonth + 1;
+
+  if (month === thisMonth) return 'due_this_month';
+  if (month === nextMonth) return 'due_next_month';
+  return null;
+}
