@@ -3,9 +3,11 @@ import Expense from '../models/Expense.js';
 import FuelLog from '../models/FuelLog.js';
 import Owner from '../models/Owner.js';
 import ServiceLog from '../models/ServiceLog.js';
+import ServiceType from '../models/ServiceType.js';
 import Vehicle, { VEHICLE_STATUSES } from '../models/Vehicle.js';
 import { getCurrentOdometer } from '../services/odometer.js';
 import { getRegistrationMonthName } from '../services/registration.js';
+import { buildServiceSchedule } from '../services/schedule.js';
 
 const router = express.Router();
 
@@ -115,6 +117,24 @@ router.patch('/:id/status', async (req, res) => {
   vehicle.status = status;
   await vehicle.save();
   res.json(vehicle);
+});
+
+// GET /api/vehicles/:id/service-schedule  (D6)
+// The database work happens here; the rule itself is the pure buildServiceSchedule()
+router.get('/:id/service-schedule', async (req, res) => {
+  const vehicle = await Vehicle.findById(req.params.id);
+  if (!vehicle) return res.status(404).json({ message: 'Vehicle not found' });
+
+  const [serviceTypes, serviceLogs, currentOdometer] = await Promise.all([
+    ServiceType.find().sort({ name: 1 }),
+    ServiceLog.find({ vehicle: vehicle._id }),
+    getCurrentOdometer(vehicle),
+  ]);
+
+  res.json({
+    currentOdometer,
+    items: buildServiceSchedule(vehicle, serviceTypes, serviceLogs, currentOdometer),
+  });
 });
 
 export default router;
