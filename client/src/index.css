@@ -1,0 +1,19 @@
+@import 'tailwindcss';
+
+/* Each --color-* token becomes Tailwind classes, e.g. bg-primary, text-ink, bg-surface */
+@theme {
+  --color-primary: #bf5a16;
+  --color-ink: #1f2d45;
+  --color-surface: #eef2f6;
+
+  /* Service status colors, named after the schedule statuses (D6) */
+  --color-overdue: #b91c1c;
+  --color-due-soon: #a16207;
+  --color-ok: #15803d;
+}
+
+@layer base {
+  body {
+    @apply bg-surface text-ink antialiased;
+  }
+}
