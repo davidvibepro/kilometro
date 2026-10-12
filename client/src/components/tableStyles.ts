@@ -10,4 +10,8 @@ export const tdClasses = 'px-4 py-3 align-top'
 export const cardListClasses = 'space-y-3 md:hidden'
 export const cardItemClasses = 'rounded-lg bg-white p-4 shadow-sm'
 
+// The same, for a list that sits inside a <Card> (no second white box and shadow)
+export const nestedTableWrapperClasses = 'hidden overflow-x-auto md:block'
+export const nestedCardItemClasses = 'rounded-lg bg-surface p-4'
+
 export const linkClasses = 'font-semibold text-primary hover:underline'

@@ -18,6 +18,14 @@ interface VehicleBase {
   updatedAt: string
 }
 
+// How logs and expenses show their vehicle in list answers
+export interface VehicleSummary {
+  _id: string
+  plateNumber: string
+  make: string
+  model: string
+}
+
 // POST, PUT and PATCH answers: owner is only an id
 export interface Vehicle extends VehicleBase {
   owner: string

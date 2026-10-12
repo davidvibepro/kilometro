@@ -6,12 +6,21 @@ interface ConfirmDialogProps {
   title: string
   message: string
   deleting?: boolean
+  confirmLabel?: string // "Delete" unless another action is being confirmed, e.g. "Retire"
   onConfirm: () => void
   onCancel: () => void
 }
 
-// Asks "are you sure?" before every delete
-function ConfirmDialog({ open, title, message, deleting = false, onConfirm, onCancel }: ConfirmDialogProps) {
+// Asks "are you sure?" before every delete (and before other actions that cannot be undone)
+function ConfirmDialog({
+  open,
+  title,
+  message,
+  deleting = false,
+  confirmLabel = 'Delete',
+  onConfirm,
+  onCancel,
+}: ConfirmDialogProps) {
   const titleId = useId()
   const messageId = useId()
 
@@ -37,7 +46,7 @@ function ConfirmDialog({ open, title, message, deleting = false, onConfirm, onCa
             Cancel
           </Button>
           <Button variant="danger" onClick={onConfirm} disabled={deleting}>
-            {deleting ? 'Deleting...' : 'Delete'}
+            {deleting ? 'Please wait...' : confirmLabel}
           </Button>
         </div>
       </div>

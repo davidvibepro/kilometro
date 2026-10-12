@@ -41,3 +41,24 @@ export function formatDate(date: string): string {
 export function toDateInputValue(date: string): string {
   return date.slice(0, 10)
 }
+
+const monthFormat = new Intl.DateTimeFormat('en-PH', { year: 'numeric', month: 'short', timeZone: 'UTC' })
+
+// "2026-10" -> "Oct 2026" (the month rows of the cost report)
+export function formatMonth(month: string): string {
+  return monthFormat.format(new Date(`${month}-01T00:00:00.000Z`))
+}
+
+// A service's distance and time left (D6), e.g. "300 km left · 8 days left" or "100 km past due"
+export function formatRemaining(kmRemaining: number | null, daysRemaining: number | null): string {
+  const parts: string[] = []
+  if (kmRemaining !== null) {
+    parts.push(kmRemaining > 0 ? `${formatKm(kmRemaining)} left` : `${formatKm(-kmRemaining)} past due`)
+  }
+  if (daysRemaining !== null) {
+    if (daysRemaining > 0) parts.push(`${daysRemaining} day${daysRemaining === 1 ? '' : 's'} left`)
+    else if (daysRemaining === 0) parts.push('due today')
+    else parts.push(`${-daysRemaining} day${daysRemaining === -1 ? '' : 's'} past due`)
+  }
+  return parts.join(' · ')
+}
