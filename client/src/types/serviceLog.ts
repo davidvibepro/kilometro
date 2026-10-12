@@ -12,3 +12,13 @@ export interface ServiceLog {
   createdAt: string
   updatedAt: string
 }
+
+// What the client sends on POST and PUT (date as "YYYY-MM-DD")
+export interface ServiceLogPayload {
+  vehicle: string
+  serviceType: string
+  date: string
+  odometer: number
+  cost?: number
+  shop?: string
+}

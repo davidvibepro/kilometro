@@ -42,6 +42,14 @@ export function toDateInputValue(date: string): string {
   return date.slice(0, 10)
 }
 
+// Today's local date as "YYYY-MM-DD": the default for date fields and the latest date allowed (D14)
+export function todayInputValue(): string {
+  const now = new Date()
+  const month = String(now.getMonth() + 1).padStart(2, '0')
+  const day = String(now.getDate()).padStart(2, '0')
+  return `${now.getFullYear()}-${month}-${day}`
+}
+
 const monthFormat = new Intl.DateTimeFormat('en-PH', { year: 'numeric', month: 'short', timeZone: 'UTC' })
 
 // "2026-10" -> "Oct 2026" (the month rows of the cost report)
