@@ -12,3 +12,13 @@ export interface FuelLog {
   createdAt: string
   updatedAt: string
 }
+
+// What the client sends on POST and PUT (date as "YYYY-MM-DD")
+export interface FuelLogPayload {
+  vehicle: string
+  date: string
+  odometer: number
+  liters: number
+  pricePerLiter: number
+  fullTank: boolean
+}
