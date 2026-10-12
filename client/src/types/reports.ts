@@ -85,3 +85,18 @@ export interface RegistrationReminder {
 }
 
 export type Reminder = ServiceReminder | RegistrationReminder
+
+// GET /stats/fleet (D10)
+export interface RankingRow {
+  vehicle: { _id: string; plateNumber: string; make: string; model: string; status: string }
+  totalCost: number
+  distance: number
+  costPerKm: number
+}
+
+export interface FleetStats {
+  spendingThisMonth: CostTotals
+  ranking: RankingRow[] // highest cost per km first
+  mostCommonService: { serviceType: { _id: string; name: string }; count: number } | null
+  overdueVehicles: number
+}
