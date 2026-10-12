@@ -9,3 +9,11 @@ export interface ServiceType {
   createdAt: string
   updatedAt: string
 }
+
+// What the client sends on POST and PUT
+export interface ServiceTypePayload {
+  name: string
+  intervalKm?: number
+  intervalMonths?: number
+  appliesTo: VehicleType[]
+}
