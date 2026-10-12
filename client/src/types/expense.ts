@@ -12,3 +12,11 @@ export interface Expense {
   createdAt: string
   updatedAt: string
 }
+
+// What the client sends on POST and PUT (date as "YYYY-MM-DD")
+export interface ExpensePayload {
+  vehicle: string
+  date: string
+  category: ExpenseCategory
+  amount: number
+}
