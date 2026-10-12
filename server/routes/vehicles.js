@@ -5,6 +5,7 @@ import Owner from '../models/Owner.js';
 import ServiceLog from '../models/ServiceLog.js';
 import ServiceType from '../models/ServiceType.js';
 import Vehicle, { VEHICLE_STATUSES } from '../models/Vehicle.js';
+import { buildCostReport, parseDateRange } from '../services/costs.js';
 import { computeFuelEfficiency } from '../services/fuelEfficiency.js';
 import { getCurrentOdometer } from '../services/odometer.js';
 import { getRegistrationMonthName } from '../services/registration.js';
@@ -146,6 +147,24 @@ router.get('/:id/fuel-efficiency', async (req, res) => {
 
   const fuelLogs = await FuelLog.find({ vehicle: vehicle._id });
   res.json(computeFuelEfficiency(fuelLogs));
+});
+
+// GET /api/vehicles/:id/costs?from=YYYY-MM-DD&to=YYYY-MM-DD  (D9, both dates optional)
+router.get('/:id/costs', async (req, res) => {
+  const vehicle = await Vehicle.findById(req.params.id);
+  if (!vehicle) return res.status(404).json({ message: 'Vehicle not found' });
+
+  // Throws a 400 for an invalid date or when from is after to
+  const { from, to } = parseDateRange(req.query.from, req.query.to);
+
+  // ALL of the vehicle's records: readings before `from` are needed for the distance
+  const [fuelLogs, serviceLogs, expenses] = await Promise.all([
+    FuelLog.find({ vehicle: vehicle._id }),
+    ServiceLog.find({ vehicle: vehicle._id }),
+    Expense.find({ vehicle: vehicle._id }),
+  ]);
+
+  res.json(buildCostReport({ vehicle, fuelLogs, serviceLogs, expenses, from, to }));
 });
 
 export default router;
