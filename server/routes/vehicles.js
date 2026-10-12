@@ -5,6 +5,7 @@ import Owner from '../models/Owner.js';
 import ServiceLog from '../models/ServiceLog.js';
 import ServiceType from '../models/ServiceType.js';
 import Vehicle, { VEHICLE_STATUSES } from '../models/Vehicle.js';
+import { computeFuelEfficiency } from '../services/fuelEfficiency.js';
 import { getCurrentOdometer } from '../services/odometer.js';
 import { getRegistrationMonthName } from '../services/registration.js';
 import { buildServiceSchedule } from '../services/schedule.js';
@@ -135,6 +136,16 @@ router.get('/:id/service-schedule', async (req, res) => {
     currentOdometer,
     items: buildServiceSchedule(vehicle, serviceTypes, serviceLogs, currentOdometer),
   });
+});
+
+// GET /api/vehicles/:id/fuel-efficiency  (D8)
+// With fewer than two full-tank fill-ups it still answers 200, with average: null and a message
+router.get('/:id/fuel-efficiency', async (req, res) => {
+  const vehicle = await Vehicle.findById(req.params.id);
+  if (!vehicle) return res.status(404).json({ message: 'Vehicle not found' });
+
+  const fuelLogs = await FuelLog.find({ vehicle: vehicle._id });
+  res.json(computeFuelEfficiency(fuelLogs));
 });
 
 export default router;
