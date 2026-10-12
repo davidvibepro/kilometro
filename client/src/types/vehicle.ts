@@ -35,6 +35,18 @@ export interface VehicleDetails extends VehicleBase {
   registrationMonth: string
 }
 
+// What the client sends on POST and PUT (status only changes through PATCH, D11)
+export interface VehiclePayload {
+  owner: string
+  plateNumber: string
+  make: string
+  model: string
+  year?: number
+  type: VehicleType
+  fuelType?: FuelType
+  startingOdometer: number
+}
+
 export interface VehicleFilters {
   type?: VehicleType | ''
   status?: VehicleStatus | ''

@@ -81,7 +81,7 @@ function OwnerDetailsPage() {
       return (
         <EmptyState
           message="This owner has no vehicles yet."
-          action={<ButtonLink to="/vehicles/new">Add vehicle</ButtonLink>}
+          action={<ButtonLink to={`/vehicles/new?owner=${id}`}>Add vehicle</ButtonLink>}
         />
       )
     }
