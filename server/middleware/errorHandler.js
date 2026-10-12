@@ -7,8 +7,11 @@ export default function errorHandler(err, req, res, next) {
 
   // Schema rules failed (required, min, max, enum, match...).
   // Each Mongoose message names its field, e.g. "Path `make` is required."
+  // Every message gets a final period so several of them read as separate sentences.
   if (err.name === 'ValidationError') {
-    const messages = Object.values(err.errors).map((error) => error.message);
+    const messages = Object.values(err.errors).map((error) =>
+      error.message.endsWith('.') ? error.message : `${error.message}.`
+    );
     return res.status(400).json({ message: messages.join(' ') });
   }
 
